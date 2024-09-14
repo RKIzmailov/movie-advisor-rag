@@ -54,21 +54,79 @@ Install the dependencies:
 pipenv install
 ```
 
-Running Jypyter notebook for experiments:
 
-```bash
-cd notebooks
-pipenv run jupyter notebook
-```
+## Experiments
 
-## Evaluation
+For experiments, I used Visual Studio Code.
+
+The notebook with experiments is located in the `notebooks/rag-tests.ipynb` file.
+
+To generate ground-truth questions for evaluation, use the `notebooks/evaluating-data-generation.ipynb` file.
 
 ### Retrieval
 
+I evaluated 3 different retrieval methods:
 
+- minisearch
+- elastic-search
+- elastic-search vector
+
+Here are the results:
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>search_function</th>
+      <th>hit_rate</th>
+      <th>mrr</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>minisearch</td>
+      <td>0.392</td>
+      <td>0.274533</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>elastic_search</td>
+      <td>0.884</td>
+      <td>0.836800</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>elastic_search_knn</td>
+      <td>0.636</td>
+      <td>0.540400</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+The best results are provided by `elastic-search retrieval`, so I will continue with it.
 
 ### RAG Flow
+I evaluated 2 different LLMs:
 
+- `gpt-4o-mini`
+- `gpt-4o v3/dyn-2024-08-13`
+
+Here are the results:
 
 ### Monitoring
 
