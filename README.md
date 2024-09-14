@@ -124,9 +124,76 @@ The best results are provided by `elastic-search retrieval`, so I will continue 
 I evaluated 2 different LLMs:
 
 - `gpt-4o-mini`
-- `gpt-4o v3/dyn-2024-08-13`
+- `gpt-3.5-turbo-0125`
 
 Here are the results:
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th></th>
+      <th>count</th>
+      <th>count_norm</th>
+    </tr>
+    <tr>
+      <th>model</th>
+      <th>relevance</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="3" valign="top">gpt-3.5-turbo-0125</th>
+      <th>NON_RELEVANT</th>
+      <td>44</td>
+      <td>8.8%</td>
+    </tr>
+    <tr>
+      <th>PARTLY_RELEVANT</th>
+      <td>53</td>
+      <td>10.6%</td>
+    </tr>
+    <tr>
+      <th>RELEVANT</th>
+      <td>153</td>
+      <td>30.6%</td>
+    </tr>
+    <tr>
+      <th rowspan="3" valign="top">gpt-4o-mini</th>
+      <th>NON_RELEVANT</th>
+      <td>7</td>
+      <td>1.4%</td>
+    </tr>
+    <tr>
+      <th>PARTLY_RELEVANT</th>
+      <td>11</td>
+      <td>2.2%</td>
+    </tr>
+    <tr>
+      <th>RELEVANT</th>
+      <td>232</td>
+      <td>46.4%</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+The best results are provided by `gpt-4o-mini`, so I will continue with it.
 
 ### Monitoring
 
