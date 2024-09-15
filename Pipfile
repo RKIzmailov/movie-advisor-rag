@@ -8,6 +8,7 @@ openai = "*"
 scikit-learn = "*"
 pandas = "*"
 flask = "*"
+docker = "*"
 
 [dev-packages]
 tqdm = "*"
