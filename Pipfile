@@ -9,11 +9,17 @@ scikit-learn = "*"
 pandas = "*"
 flask = "*"
 docker = "*"
+psycopg2-binary = "*"
+python-dotenv = "*"
+gunicorn = "*"
+elasticsearch = "*"
 
 [dev-packages]
 tqdm = "*"
 notebook = "==7.1.2"
 ipywidgets = "*"
+jupyter = "*"
+requests = "*"
 wget = "*"
 sentence-transformers = "*"
 

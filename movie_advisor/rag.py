@@ -9,10 +9,15 @@ try:
     openai_api_key = os.getenv('OPENAI_API_KEY')
 
     client = OpenAI()
-    es_client = ingest.load_es()
     print('OpenAI client is ready')
 except:
-    print('OpenAI client is NOT ready. Make sure you have valid and installed API key.')
+    print('[!!Warning!!] OpenAI client is NOT ready. Make sure you have valid and installed API key.')
+
+try:
+    es_client = ingest.load_es()
+    print('Elasticsearch client is ready')
+except:
+    print('[!!Warning!!] Elasticsearch client is NOT ready.')
 
 def elastic_search(query):
     index_name = "movie-questions"

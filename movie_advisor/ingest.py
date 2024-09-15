@@ -2,11 +2,14 @@ import pandas as pd
 import docker
 from elasticsearch import Elasticsearch
 from tqdm.auto import tqdm
+from tqdm import tqdm
 import time
 import requests
+import os
 
+DATA_PATH = os.getenv("DATA_PATH", "../data/movie_dataset.csv")
 
-def fetch_data(data_path = '../data/movie_dataset.csv'):
+def fetch_data(data_path = DATA_PATH):
     print("Fetching documents...")
     df = pd.read_csv(data_path)
     df = df[['id', 'title', 'year', 'plot', 'genres', 'director']]
@@ -52,8 +55,9 @@ def es_container_run():
 
     print(f"Container {container.name} is running.")
     print("Waiting for Elasticsearch to be ready...")
-    
-    while True:
+
+    retries = 20  # Number of retries
+    while retries > 0:
         try:
             response = requests.get('http://localhost:9200')
             if response.status_code == 200:
@@ -62,7 +66,9 @@ def es_container_run():
         except requests.exceptions.ConnectionError:
             print("Elasticsearch is not ready yet. Waiting...")
             time.sleep(5)
-
+            retries -= 1
+    if retries == 0:
+        raise RuntimeError("Elasticsearch failed to start.")
 
 def setup_elasticsearch():
     print("Setting up Elasticsearch...")

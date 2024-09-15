@@ -1,5 +1,4 @@
 .envrc
-.env
 
 
 # Byte-compiled / optimized / DLL files
@@ -126,7 +125,7 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-.env
+
 .venv
 env/
 venv/

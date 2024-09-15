@@ -1,7 +1,7 @@
 
----
 
-<h1 style="text-align: center; font-family: sans-serif; letter-spacing: 0.5em;">MOVIE   ADVISOR</h1>
+
+# <h1 style="text-align: center; font-family: sans-serif; letter-spacing: 0.4em; font-size: 4em;">MOVIE     ADVISOR</h1>
 
 
 ## 1.1. Problem Description
@@ -81,9 +81,11 @@ A sample of the data is shown below:
 
 You can find data in `data/movie_dataset.csv`
 
-# 2. Running  and using the application
+# 2. Running and using the application
 
-## 2.1. Enviroment preparation
+## 2.1. Preparation
+
+### 2.1.1. Enviroment preparation
 
 The application uses OpenAI, so you need OpenAI API key:
 1. Install `direnv`.
@@ -100,20 +102,27 @@ The application uses OpenAI, so you need OpenAI API key:
     pipenv install --dev
     ```
 
-## 2.3. Running the application
+### 2.1.2. Database configuration
+
+```bash
+docker-compose up
+```
+
+
+## 2.2. Running the application
 
 The Flask is used for serving the application as API.
 
-**2.3.1. Direct Running the flask application**
+**2.2.1. Direct Running the flask application**
 
-    ```bash
-    cd movie_advisor
-    pipenv run python app.py
-    ```
+```bash
+cd movie_advisor
+pipenv run python app.py
+```
 
-**2.3.2. Use API**
+## 2.3. Usage the application
 
-  **A. Using request**
+### 2.3.1. Using request
 
   When the application is running, you can use `requests` to send questions for testing it.
   
@@ -123,7 +132,9 @@ The Flask is used for serving the application as API.
   pipenv run python test.py
   ```
 
-  **B. You can also use `curl`. Open new terminal and run the commands:**
+### 2.3.2. You can also use `curl`. 
+
+Open new terminal and run the commands:
     
   - To ask the question (*change question if needed*)
     ```bash 
