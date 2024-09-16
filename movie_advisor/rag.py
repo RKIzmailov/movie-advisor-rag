@@ -1,23 +1,39 @@
+import openai
 import ingest
-
 import os
 from dotenv import load_dotenv
 from openai import OpenAI
 
-try:
-    load_dotenv()
-    openai_api_key = os.getenv('OPENAI_API_KEY')
-
+load_dotenv()
+openai_api_key = os.getenv('OPENAI_API_KEY')
+if openai_api_key:
+    openai.api_key = openai_api_key
     client = OpenAI()
     print('OpenAI client is ready')
-except:
-    print('[!!Warning!!] OpenAI client is NOT ready. Make sure you have valid and installed API key.')
+else:
+    raise ValueError('API key not found in environment variables')
 
-try:
-    es_client = ingest.load_es()
-    print('Elasticsearch client is ready')
-except:
-    print('[!!Warning!!] Elasticsearch client is NOT ready.')
+
+
+# # Initialize the OpenAI client only in the main process
+# client = None
+# if os.environ.get("WERKZEUG_RUN_MAIN") == "true":
+#     if openai_api_key:
+#         openai.api_key = openai_api_key
+#         client = OpenAI()
+#         print('OpenAI client is ready')
+#     else:
+#         raise ValueError('API key not found in environment variables')
+
+# Initialize Elasticsearch only in the main process
+es_client = None
+if os.environ.get("WERKZEUG_RUN_MAIN") == "true":
+    try:
+        es_client = ingest.load_es()
+        print('Elasticsearch client is ready')
+    except Exception as e:
+        print(f'[!!Warning!!] Elasticsearch client is NOT ready: {str(e)}')
+
 
 def elastic_search(query):
     index_name = "movie-questions"

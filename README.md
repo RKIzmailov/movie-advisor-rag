@@ -87,22 +87,38 @@ You can find data in `data/movie_dataset.csv`
 
 ### 2.1.1. Enviroment preparation
 
+**a) OpenAI API key installation**
 The application uses OpenAI, so you need OpenAI API key:
 1. Install `direnv`.
-2. Copy `.envrc_template` into `.envrc` and insert your API key there.
-3. Run `direnv allow` to load the key into your environment.
-4. Make sure you have pipenv installed:
+    ```bash
+    sudo apt update
+    sudo apt install direnv
+    echo 'eval "$(direnv hook bash)"' >> ~/.bashrc
+    source ~/.bashrc
+    ```
+2. Copy `.envrc_template` into `.envrc`.
+3. Insert your API key into `.envrc`.
+4. Run `direnv allow` to load the key into your environment.
+    ```bash
+    direnv allow
+    ```
+
+**b) Dependencies installation**
+
+5. Make sure you have `pipenv` installed:
 
     ```bash
     pip install pipenv
     ```
-5. Install the app dependencies:
+6. Install the app dependencies:
 
     ```bash
     pipenv install --dev
     ```
 
 ### 2.1.2. Database configuration
+
+The database needs to be initialized before the application starts for the first time.
 
 ```bash
 docker-compose up
@@ -113,7 +129,7 @@ docker-compose up
 
 The Flask is used for serving the application as API.
 
-**2.2.1. Direct Running the flask application**
+## 2.2.1. Direct Running the flask application
 
 ```bash
 cd movie_advisor
@@ -126,13 +142,14 @@ pipenv run python app.py
 
   When the application is running, you can use `requests` to send questions for testing it.
   
-  You can change the questtion in the [test.py](test.py)
+  You can change the questtion in the [test.py](test.py) if needed.
 
   ```bash
+  cd ..
   pipenv run python test.py
   ```
 
-### 2.3.2. You can also use `curl`. 
+### 2.3.2. You can also use `curl`
 
 Open new terminal and run the commands:
     
@@ -205,7 +222,7 @@ Here are the results:
 | minisearch          | 0.392    | 0.274533 |
 | elastic_search      | 0.884    | 0.836800 |
 | elastic_search_knn  | 0.636    | 0.540400 |
---
+
 
 The best results are provided by `elastic-search retrieval`, so I will continue with it.
 
@@ -269,7 +286,7 @@ Here are the results:
   </tbody>
 </table>
 </div>
---
+
 
 The best result is provided by `gpt-4o-mini`, so I will continue with it.
 
