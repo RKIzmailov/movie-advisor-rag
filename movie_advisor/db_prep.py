@@ -1,5 +1,4 @@
 from dotenv import load_dotenv
-
 from db import init_db
 
 load_dotenv()

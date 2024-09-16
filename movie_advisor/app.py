@@ -1,7 +1,8 @@
 from flask import Flask, request, jsonify
 import uuid
 import logging
-from rag import rag 
+from rag import rag
+import db
 
 app = Flask(__name__)
 logging.basicConfig(level=logging.INFO)
@@ -18,12 +19,18 @@ def ask_question():
     conversation_id = str(uuid.uuid4())
     
     try:
-        answer = rag(question)
+        answer_data = rag(question)
         result = jsonify({
             'conversation_id': conversation_id,
             'question': question,
-            'result': answer,
+            'result': answer_data['answer'],
         })
+
+        db.save_conversation(
+            conversation_id=conversation_id, 
+            question=question, 
+            answer_data = answer_data, 
+            timestamp=None)
         
         return result
     

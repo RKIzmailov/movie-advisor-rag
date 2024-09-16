@@ -1,8 +1,10 @@
 import openai
-import ingest
-import os
-from dotenv import load_dotenv
 from openai import OpenAI
+import os
+from time import time
+from dotenv import load_dotenv
+
+import ingest
 
 load_dotenv()
 openai_api_key = os.getenv('OPENAI_API_KEY')
@@ -13,6 +15,7 @@ if openai_api_key:
 else:
     raise ValueError('API key not found in environment variables')
 
+model = 'gpt-4o-mini'
 
 
 # # Initialize the OpenAI client only in the main process
@@ -95,7 +98,7 @@ year : {year}
 
 def llm(prompt:str):
     response = client.chat.completions.create(
-        model='gpt-4o-mini',
+        model=model,
         messages=[{"role": "user", "content": prompt}]
     )
     
@@ -103,8 +106,27 @@ def llm(prompt:str):
 
 
 def rag(query):
+    t_start = time()
     search_results = elastic_search(query)
     prompt = build_prompt(query, search_results)
     answer = llm(prompt)
+    t_stop = time()
 
-    return answer
+    time_took = t_stop - t_start
+
+    answer_data = {
+        "answer": answer,
+        "model_used": model,
+        "response_time": time_took,
+        "relevance": "RELEVANT",
+        "relevance_explanation":"TEST",
+        "prompt_tokens": len(prompt.split()),
+        "completion_tokens": len(answer.split()),
+        "total_tokens": len(prompt.split()) + len(answer.split()),
+        "eval_prompt_tokens": 0,
+        "eval_completion_tokens": 0,
+        "eval_total_tokens": 0,
+        "openai_cost": 0,
+    }
+
+    return answer_data
