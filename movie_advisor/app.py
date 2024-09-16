@@ -64,3 +64,4 @@ if __name__ == '__main__':
         app.run(debug=True, host="0.0.0.0", port=5000)
     except Exception as e:
         logging.error(f"Failed to start the Flask app: {str(e)}")
+        
