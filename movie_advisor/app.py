@@ -58,6 +58,7 @@ def submit_feedback():
         'feedback': feedback
     })
 
+
 if __name__ == '__main__':
     try:
         app.run(debug=True, host="0.0.0.0", port=5000)

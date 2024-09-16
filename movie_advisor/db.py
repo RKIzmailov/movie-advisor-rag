@@ -141,3 +141,4 @@ def get_feedback_stats():
             return cur.fetchone()
     finally:
         conn.close()
+        
