@@ -47,8 +47,10 @@ def submit_feedback():
     if not conversation_id or feedback not in [1, -1]:
         return jsonify({'error': 'Invalid input'}), 400
     
-    # For now, just acknowledge receiving the feedback
-    # TODO: Implement database writing logic here
+    db.save_feedback(
+        conversation_id=conversation_id,
+        feedback=feedback,
+    )
     
     return jsonify({
         'message': 'Feedback received. Thank you!',

@@ -1,10 +1,13 @@
 import pandas as pd
 import requests
 
-question = "What does Ryan Bingham do for a living, and how does it relate to his frequent travels?"
-url = "http://localhost:5000/ask"
+df = pd.read_csv("./data/questions_ground_truth.csv")
+question = df.sample(n=1).iloc[0]['question']
 print("question: ", question)
 
+url = "http://localhost:5000/ask"
+
 data = {"question": question}
+
 response = requests.post(url, json=data)
 print(response.json())

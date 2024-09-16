@@ -16,6 +16,17 @@ Movie Advisor interacts with users via a conversational interface, allowing them
 - Input partial or vague movie plot descriptions to recall the exact movie title.
 - Request movie recommendations based on their preferred genres or specific plot elements.
 
+This project has been developed within the `llm-zoomcamp` by [DataTalksClub](https://github.com/DataTalksClub).
+
+**Technologies**
+
+  - `Python 3.12`
+  - `Docker` to run Elasticsearch
+  - `Elasticsearch` for full-text search
+  - `OpenAI` as an LLM
+  - `Flask` as the API interface
+---
+
 **a) RAG flow**
 
   The application employs a RAG flow to retrieve relevant movie information and generate suitable suggestions, providing a seamless and efficient solution for movie selection and recall.
@@ -41,17 +52,30 @@ Movie Advisor interacts with users via a conversational interface, allowing them
 
   The ingestion script is located in `ingest.py`.
 
-  Since the application uses Elasticsearch, the container with ES also runs automatically within `ingest.py`. Therefore, the ingestion script is executed at the startup of the application.
+  Since the application uses `Elasticsearch`, the container with ES also runs automatically within `ingest.py`. Therefore, the ingestion script is executed at the startup of the application.
 
   It is triggered inside `rag.py` when we import it.
 
-**d) Technologies**
+**d) Monitoring and Evaluation**
+  
+  The system incorporates comprehensive monitoring and evaluation mechanisms to ensure quality and efficiency:
 
-  - `Python 3.12`
-  - `Docker` to run Elasticsearch
-  - `Elasticsearch` for full-text search
-  - `OpenAI` as an LLM
-  - `Flask` as the API interface
+  - **User Feedback Collection:** User feedback is continuously gathered to assess satisfaction and accuracy.
+  - **LLM-based Evaluation:** We employ an "LLM-as-a-Judge" approach to automatically evaluate the quality of each generated response.
+  - **Performance Metrics:** Key metrics, including response generation time, token usage, and LLM cost, are tracked.
+  - **Visualization:** All monitoring data is consolidated and visualized in Grafana, providing real-time insights and performance analytics.
+
+  Check the [Monitoring and Visualization](#3-monitoring-and-visualisation) for details.
+
+**e) Containerization**
+
+  To streamline the setup of dependencies, a `docker-compose` configuration is provided for `PostgreSQL` and `Grafana`. This configuration simplifies the process of setting up and managing these required services.
+
+  Additionally, `Elasticsearch` is included in a Docker container that runs automatically as part of the `ingest.py` script.
+
+**f) Reproducibility**
+
+  I hope the following instructions are clear and straightforward. The dataset is readily accessible, and running the code is designed to be easy and efficient. If you encounter any issues or have questions, please feel free to reach out.
 
 
 ## 1.3. Data Description
@@ -82,6 +106,8 @@ A sample of the data is shown below:
 You can find data in `data/movie_dataset.csv`
 
 # 2. Running and using the application
+
+It is better to use Codespaces to run this application.
 
 ## 2.1. Preparation
 
@@ -120,32 +146,48 @@ The application uses OpenAI, so you need OpenAI API key:
 
 The database needs to be initialized before the application starts for the first time.
 
-```bash
-docker-compose up
-```
+1. Run `postgres`
+
+    ```bash
+    docker-compose up postgres
+    ```
+
+2. In new terminal initialize database
+
+    ```bash
+    pipenv shell
+    cd movie_advisor
+    export POSTGRES_HOST=localhost
+    python db_prep.py
+    ```
+
+    To check the content of the database
+
+    ```bash
+    pipenv run pgcli -h localhost -U your_username -d course_assistant -W
+    ```
 
 
 ## 2.2. Running the application
 
 The Flask is used for serving the application as API.
 
-## 2.2.1. Direct Running the flask application
+To run the application:
+
 
 ```bash
-cd movie_advisor
-pipenv run python app.py
+python app.py
 ```
 
 ## 2.3. Usage the application
 
 ### 2.3.1. Using request
 
-  When the application is running, you can use `requests` to send questions for testing it.
-  
-  You can change the questtion in the [test.py](test.py) if needed.
+  When the application is running, you can use `requests` to send questions for testing it. You can change the questtion in the [test.py](test.py) if needed.
+
+  Open new terminal and run the command:
 
   ```bash
-  cd ..
   pipenv run python test.py
   ```
 
@@ -173,7 +215,7 @@ Open new terminal and run the commands:
     }
     ```
 
-  - To provide feedback (*please do not change the conversation ID and I will collect feedbacks*)
+  - To provide feedback (*change the conversation ID*)
     ```bash
     ID="ca20e77a-f1c0-4614-ac75-1cfaac4a1d36"
     FEEDBACK=1
@@ -197,9 +239,57 @@ Open new terminal and run the commands:
     }
     ```
 
-# 3. Experiments
 
-### 3.1. RAG flow
+# 3. Monitoring and Visualisation
+
+Monitoring is available through Grafana.
+
+## 3.1. Running Grafana
+
+1. Open a new terminal window:
+
+    ```bash
+    docker-compose up -d grafana
+    ```
+
+2. Check the status of Grafana:
+
+    ```bash
+    docker ps | grep grafana
+    ```
+
+3. If everything is running correctly, proceed with the following steps:
+
+    ```bash
+    pipenv shell
+
+    cd grafana
+
+    # Ensure the POSTGRES_HOST environment variable is not overwritten
+    env | grep POSTGRES_HOST
+
+    python init.py
+    ```
+
+## 3.2. Accessing the Dashboard
+
+1. Navigate to [http://localhost:3000](http://localhost:3000).
+
+    - **Login:** `admin`
+    - **Password:** `admin`
+
+2. When prompted, you can keep the default "admin" password.
+
+3. Open the Dashboards to view the available metrics.
+
+You should see a dashboard similar to the example below:
+
+![alt text](grafana.png)
+
+
+# 4. Experiments
+
+### 4.1. RAG flow
 
 For experiments, I used Visual Studio Code.
 
@@ -207,7 +297,7 @@ The notebook with experiments is located in the [rag-test.ipynb](/notebooks/rag-
 
 The ground-truth questions for evaluation are generated in the [evaluating-data-generation.ipynb](notebooks/evaluating-data-generation.ipynb) file.
 
-### 3.2. Retrieval evaluation
+### 4.2. Retrieval evaluation
 
 I evaluated 3 different retrieval methods:
 
@@ -226,7 +316,7 @@ Here are the results:
 
 The best results are provided by `elastic-search retrieval`, so I will continue with it.
 
-### 3.3. RAG evaluation
+### 4.3. RAG evaluation
 
 I have evaluated 2 different LLMs with LLM-as-a-Judge metric:
 
@@ -290,3 +380,7 @@ Here are the results:
 
 The best result is provided by `gpt-4o-mini`, so I will continue with it.
 
+
+# Acknowledgements
+
+I would like to express our gratitude to [DataTalksClub](https://github.com/DataTalksClub) for the `llm-zoomcamp` resources and to Alexey Grigorev for providing clear and comprehensive instructions. You are the best.
